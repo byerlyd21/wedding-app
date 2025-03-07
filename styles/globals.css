@@ -22,11 +22,44 @@ body {
 }
 
 .rsvp-input {
-    margin: 8px 0;
-    padding: 8px;
-    border: 1px solid #2a2a2f;
-    border-radius: 8px;
     width: 100%;
+    padding: 6px 8px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.phone-input-container {
+    margin-bottom: 8px;
+}
+
+.phone-input {
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+.phone-group-3 {
+    width: 97.5px;;
+}
+
+.phone-group-4 {
+    width: 130px;
+}
+
+/* Focused input styles */
+.rsvp-input:focus, .phone-input:focus {
+    border-color: #34dbd5; /* Blue border */
+    outline: none;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3); /* Light blue shadow */
+}
+
+/* Placeholder styles */
+.rsvp-input::placeholder, .phone-input::placeholder {
+    color: #aaa;
+    font-style: italic;
 }
 
 .btn-primary {
@@ -39,6 +72,42 @@ body {
     margin-top: 16px;
     max-width: fit-content
 }
+
+.rsvp-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 75%;
+    text-align: center;
+}
+
+.header-primary {
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+.text-secondary {
+    font-size: 14px;
+    margin-top: 8px;
+    color: #6f6f6f;
+}
+
+.spinner {
+    border: 2px solid #2a2a2f;
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 8px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
 form {
 display: flex;

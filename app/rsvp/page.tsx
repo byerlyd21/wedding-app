@@ -2,58 +2,106 @@
 
 import { useState } from "react";
 
+import {
+    InputOTP,
+    InputOTPGroup,
+    InputOTPSeparator,
+    InputOTPSlot,
+  } from "@/components/ui/input-otp"
+
 export default function RSVPPage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    
+    setLoading(true);
+
     const response = await fetch("/api/rsvp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, phone, address }),
     });
 
+    setLoading(false);
     if (response.ok) {
-      // Redirect or show success message
-      alert("RSVP submitted successfully!");
+        setSubmitted(true);
     } else {
-      alert("Something went wrong!");
+        alert("Something went wrong!");
     }
   };
 
+  const handleOTPChange = (newValue: string) => {
+    setPhone(newValue); 
+  }
+
   return (
     <div className="rsvp-container">
-        <h1>Reserve your spot!</h1>
+    {submitted ? (
+      <div className="flex flex-col items-center">
+        <h1 className="header-primary mt-24">Thank you!</h1>
+        <p>We look forward to seeing you!</p>
+      </div>
+    ) : (
+      <>
+      <div className="rsvp-header">
+        <h1 className="header-primary">Reserve your spot!</h1>
+        <p className="text-secondary">We'd love to see you at our wedding on August 16th at 5:00 pm</p>
+      </div>
         <form onSubmit={handleSubmit} className="rsvp-form">
-        <input
-            type="text"
-            placeholder="Your Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="rsvp-input"
-        />
-        <input
-            type="text"
-            placeholder="Your Phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-            className="rsvp-input"
-        />
-        <input
-            type="text"
-            placeholder="Your Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-            className="rsvp-input"
-        />
-        <button type="submit" className="btn-primary">Submit RSVP</button>
+            <label className="text-secondary w-full">Name</label>
+            <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="rsvp-input"
+            />
+            <label className="text-secondary w-full">Phone</label>
+            <div className="phone-input-container">
+                <InputOTP maxLength={10} value={phone} onChange={handleOTPChange}>
+                    <InputOTPGroup className="phone-group-3">
+                        <InputOTPSlot index={0} className="phone-input"/>
+                        <InputOTPSlot index={1} className="phone-input"/>
+                        <InputOTPSlot index={2} className="phone-input"/>
+                    </InputOTPGroup>
+                    <InputOTPGroup className="phone-group-3">
+                        <InputOTPSlot index={3} className="phone-input"/>
+                        <InputOTPSlot index={4} className="phone-input"/>
+                        <InputOTPSlot index={5} className="phone-input"/>
+                    </InputOTPGroup>
+                    <InputOTPGroup className="phone-group-4">
+                        <InputOTPSlot index={6} className="phone-input"/>
+                        <InputOTPSlot index={7} className="phone-input"/>
+                        <InputOTPSlot index={8} className="phone-input"/>
+                        <InputOTPSlot index={9} className="phone-input"/>
+                    </InputOTPGroup>
+                </InputOTP>
+            </div>
+            <label className="text-secondary w-full">Address</label>
+            <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                required
+                className="rsvp-input"
+            />
+            <button type="submit" className="btn-primary" disabled={loading}>
+              {loading ? (
+                <>
+                    <div className="spinner"></div>
+                    Submitting...
+                </>
+              ) : (
+                "Submit RSVP"
+              )}
+            </button>
         </form>
-    </div>
+      </>
+    )}
+  </div>
   );
 }
