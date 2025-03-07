@@ -56,6 +56,13 @@ export default function RSVPPage() {
         <div className="flex flex-col items-center">
             <h1 className="header-primary mt-24">Thank you!</h1>
             <p>We look forward to seeing you!</p>
+
+            <a
+                href="https://amazon.com"
+                className="btn-primary mt-12!"
+                >
+                View our registry
+            </a>
         </div>
         ) : (
         <>
