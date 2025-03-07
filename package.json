@@ -12,6 +12,7 @@
     "@neondatabase/serverless": "^0.10.4",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.40.0",
+    "long": "^5.3.1",
     "next": "15.2.1",
     "pg": "^8.13.3",
     "pg-migrate": "^2.0.1",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/long": "^4.0.2",
     "@types/node": "^20",
     "@types/pg": "^8.11.11",
     "@types/react": "^19",
