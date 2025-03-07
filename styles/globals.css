@@ -1,0 +1,52 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: aliceblue;
+    color: #2a2a2f;
+  }
+  
+
+.rsvp-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 32px;
+    height: 100vh;
+}
+  
+.rsvp-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 340px;
+    margin: 16px;
+}
+
+.rsvp-input {
+    margin: 8px 0;
+    padding: 8px;
+    border: 1px solid #2a2a2f;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: #2a2a2f;
+    color: white;
+    padding: 8px 32px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 16px;
+    max-width: fit-content
+}
+
+form {
+display: flex;
+flex-direction: column;
+}
+  
+input {
+margin: 8px 0;
+padding: 8px;
+}
+  
