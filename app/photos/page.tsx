@@ -10,9 +10,17 @@ import { toast } from "sonner";
 import PhotoCarousel from "@/components/ui/photo-carousel";
 
 export default function PhotosPage() {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal visibility
-  const [photo, setPhoto] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal visibility
+    const [photo, setPhoto] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [hideBtn, setHideBtn] = useState(false);
+
+  useEffect(() => {
+    const uploadCount = parseInt(getCookie("uploadCount") || "0");
+    if (uploadCount >= 2) {
+       setHideBtn(true);
+    }
+  }, []);
 
   // Handle opening the modal
   const handleOpenModal = () => {
@@ -83,17 +91,42 @@ export default function PhotosPage() {
     } catch (error) {
       console.error("Error fetching IP address:", error);
       return null;
-    } finally {
-      setLoading(false);
     }
   };
+
+  const setCookie = (name: string, value: string, days: number) => {
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Set expiration to 'days' days
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + (value || "") + ";" + expires + ";path=/";
+  };
+  
+  const getCookie = (name: string) => {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(";");
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === " ") c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  };
+  
 
   // Placeholder function for submitting the photo
   const handleSubmit = async () => {
     setLoading(true);
     const userIP = await getUserIP(); // Get the IP address first
+
+    const uploadCount = parseInt(getCookie("uploadCount") || "0");
+    if (uploadCount >= 2) {
+      toast('You have already uploaded two photos.');
+      setLoading(false);
+      return;
+    }
   
     if (!userIP) {
+        setLoading(false);
         return;
     }
   
@@ -105,20 +138,25 @@ export default function PhotosPage() {
           },
           body: JSON.stringify({ photo, ipAddress: userIP }),
         });
-      
-        // ✅ Ensure response is valid before parsing JSON
+    
         if (!response.ok) {
-          const errorMessage = await response.text(); // Read text response safely
+          const errorMessage = await response.text();
           throw new Error(errorMessage || 'Something went wrong!');
         }
-      
-        const data = await response.json();
+    
+        // If the photo upload is successful, increment the upload count and set the cookie
+        const newCount = uploadCount + 1;
+        setCookie("uploadCount", newCount.toString(), 3650); // Set cookie to last for 10 years
+    
         toast('Photo uploaded successfully!');
       } catch (error) {
         toast(`${error instanceof Error ? error.message : String(error)}`);
+      } finally {
+        setIsModalOpen(false); 
+        setLoading(false);
       }
   
-    setIsModalOpen(false); // Close the modal after submitting
+    setIsModalOpen(false);
   };
 
   return (
@@ -131,9 +169,11 @@ export default function PhotosPage() {
           </p>
         </div>
         <PhotoCarousel/>
-        <div className="btn-primary" onClick={handleOpenModal}>
-          Submit a photo
-        </div>
+        {!hideBtn ? (
+            <div className="btn-primary" onClick={handleOpenModal}>
+                Submit a photo
+            </div>
+        ) : null}
         {isModalOpen && (
           <div className="modal-overlay">
             <div className="modal-content">
