@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       uploadedPhotos[0].photo_2
     ) {
       return NextResponse.json(
-        { error: "You can only upload 2 photos." },
+        "You can only upload 2 photos.",
         { status: 400 }
       );
     }
@@ -63,3 +63,14 @@ export async function POST(request: Request) {
     );
   }
 }
+
+
+export async function GET() {
+    try {
+      const photos = await db.select().from(Photos);
+      return NextResponse.json(photos);
+    } catch (error) {
+      console.error("Error fetching photos:", error);
+      return NextResponse.json({ error: "Failed to fetch photos" }, { status: 500 });
+    }
+  }

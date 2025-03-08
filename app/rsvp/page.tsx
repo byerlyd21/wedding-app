@@ -7,6 +7,7 @@ import {
     InputOTPSeparator,
     InputOTPSlot,
   } from "@/components/ui/input-otp"
+  import { toast } from "sonner"
 
 export default function RSVPPage() {
   const [name, setName] = useState("");
@@ -20,10 +21,16 @@ export default function RSVPPage() {
     event.preventDefault();
 
     if (!name) {
-        setNameError("Please enter your name.");
-      } else if (!phone) {
-        setNameError("");
-        // Submit form logic here
+        toast.error("Please enter your name.");
+        return;
+      }
+      if (!phone || phone.length < 10) {
+        toast.error("Please enter a valid phone number.");
+        return;
+      }
+      if (!address) {
+        toast.error("Please enter your address.");
+        return;
       }
     setLoading(true);
 
@@ -37,7 +44,7 @@ export default function RSVPPage() {
     if (response.ok) {
         setSubmitted(true);
     } else {
-        alert("Something went wrong!");
+        toast("Something went wrong!");
     }
   };
 
@@ -75,7 +82,6 @@ export default function RSVPPage() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    required
                     className="rsvp-input"
                 />
                 <label className="text-secondary w-full">Phone</label>
@@ -104,7 +110,6 @@ export default function RSVPPage() {
                     type="text"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    required
                     className="rsvp-input"
                 />
                 {nameError && <span className="text-red-500 text-sm">{nameError}</span>}

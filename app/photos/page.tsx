@@ -5,12 +5,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Autoplay from "embla-carousel-autoplay";
 
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
+
+import PhotoCarousel from "@/components/ui/photo-carousel";
 
 export default function PhotosPage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal visibility
@@ -100,29 +96,29 @@ export default function PhotosPage() {
     const userIP = await getUserIP(); // Get the IP address first
   
     if (!userIP) {
-      alert("Unable to get IP address");
-      return;
+        return;
     }
   
     try {
-      const response = await fetch('/api/photos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ photo: photo, ipAddress: userIP }),
-      });
-  
-      const data = await response.json();
-  
-      if (response.ok) {
-        alert('Photo uploaded successfully!');
-      } else {
-        alert(data.error || 'Something went wrong!');
+        const response = await fetch('/api/photos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ photo, ipAddress: userIP }),
+        });
+      
+        // ✅ Ensure response is valid before parsing JSON
+        if (!response.ok) {
+          const errorMessage = await response.text(); // Read text response safely
+          throw new Error(errorMessage || 'Something went wrong!');
+        }
+      
+        const data = await response.json();
+        toast('Photo uploaded successfully!');
+      } catch (error) {
+        toast(`${error instanceof Error ? error.message : String(error)}`);
       }
-    } catch (error) {
-      console.error('Error uploading photo:', error);
-    }
   
     setIsModalOpen(false); // Close the modal after submitting
   };
@@ -131,32 +127,12 @@ export default function PhotosPage() {
     <>
       <div className="photos-container relative w-full h-full overflow-hidden">
         <div className="rsvp-header text-center">
-          <h1 className="header-primary mt-16">Help us remember our special day!</h1>
+          <h1 className="header-primary mt-4">Help us remember our special day!</h1>
           <p className="secondary-text mt-4">
             Take 2 photos throughout the event and share them with us!
           </p>
         </div>
-
-        <Carousel
-          plugins={[plugin.current]}
-          className="w-full"
-          onMouseEnter={plugin.current.stop}
-          onMouseLeave={plugin.current.reset}
-        >
-          <CarouselContent className="mt-8">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <CarouselItem key={index}>
-                <div className="p-1">
-                  <Card className="custom-card">
-                    <CardContent className="flex aspect-square items-center justify-center p-6">
-                      <span className="text-4xl font-semibold">{index + 1}</span>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        <PhotoCarousel/>
         <div className="btn-primary" onClick={handleOpenModal}>
           Submit a photo
         </div>
@@ -187,7 +163,7 @@ export default function PhotosPage() {
                   <p className="text-secondary">No photo selected</p>
                 )}
               </div>
-              <div className="flex flex-row gap-24 mt-8">
+              <div className="flex flex-row justify-between mt-8 w-full">
                 <button onClick={handleCloseModal} className="btn-secondary">
                   Close
                 </button>
