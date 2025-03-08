@@ -4,6 +4,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Autoplay from "embla-carousel-autoplay";
+import { toast } from "sonner";
 
 
 import PhotoCarousel from "@/components/ui/photo-carousel";
