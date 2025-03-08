@@ -82,9 +82,46 @@ export default function PhotosPage() {
     Autoplay({ delay: 4000, stopOnInteraction: true })
   );
 
+  const getUserIP = async () => {
+    try {
+      const response = await fetch("https://api.ipify.org?format=json");
+      const data = await response.json();
+      return data.ip; // This is the user's IP address
+    } catch (error) {
+      console.error("Error fetching IP address:", error);
+      return null;
+    }
+  };
+
   // Placeholder function for submitting the photo
-  const handleSubmit = () => {
-    console.log("Photo submitted:", photo); // This is where you'd handle the actual submission
+  const handleSubmit = async () => {
+    const userIP = await getUserIP(); // Get the IP address first
+  
+    if (!userIP) {
+      alert("Unable to get IP address");
+      return;
+    }
+  
+    try {
+      const response = await fetch('/api/photos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ photo: photo, ipAddress: userIP }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert('Photo uploaded successfully!');
+      } else {
+        alert(data.error || 'Something went wrong!');
+      }
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+    }
+  
     setIsModalOpen(false); // Close the modal after submitting
   };
 
