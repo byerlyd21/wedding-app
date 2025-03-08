@@ -22,6 +22,7 @@ export default function PhotosPage() {
   // Handle closing the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setPhoto(null); 
   };
 
   // Handle taking a photo using the camera
@@ -73,10 +74,6 @@ export default function PhotosPage() {
   const handleClick = () => {
     fileInputRef.current?.click();
   };
-
-  const plugin = React.useRef(
-    Autoplay({ delay: 4000, stopOnInteraction: true })
-  );
 
   const getUserIP = async () => {
     try {

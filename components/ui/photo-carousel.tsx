@@ -12,7 +12,7 @@ interface Photo {
 
 export default function PhotoCarousel() {
   const [photos, setPhotos] = useState<string[]>([]); // Store a list of images
-  const plugin = useRef(Autoplay({ delay: 3000 })); // ✅ Initialize with autoplay
+  const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: false })); // Autoplay plugin instance
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -45,7 +45,7 @@ export default function PhotoCarousel() {
                 <img
                   src={photoUrl}
                   alt={`Photo ${index + 1}`}
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full max-h-[300px] object-cover rounded-lg"
                 />
               </div>
             </CarouselItem>
