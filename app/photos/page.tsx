@@ -16,11 +16,15 @@ export default function PhotosPage() {
     const [hideBtn, setHideBtn] = useState(false);
 
   useEffect(() => {
+    checkUploadCount();
+  }, []);
+
+  const checkUploadCount = () => {
     const uploadCount = parseInt(getCookie("uploadCount") || "0");
     if (uploadCount >= 2) {
        setHideBtn(true);
     }
-  }, []);
+  }
 
   // Handle opening the modal
   const handleOpenModal = () => {
@@ -147,12 +151,13 @@ export default function PhotosPage() {
         // If the photo upload is successful, increment the upload count and set the cookie
         const newCount = uploadCount + 1;
         setCookie("uploadCount", newCount.toString(), 3650); // Set cookie to last for 10 years
-    
+        checkUploadCount();
         toast('Photo uploaded successfully!');
       } catch (error) {
         toast(`${error instanceof Error ? error.message : String(error)}`);
       } finally {
         setIsModalOpen(false); 
+        setPhoto(null); 
         setLoading(false);
       }
   
