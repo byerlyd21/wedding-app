@@ -1,7 +1,8 @@
 // app/api/photos/route.ts
 import { NextResponse } from "next/server";
-import { db } from "../../../lib/db"; // Import the database client
-import { Photos } from "../../../lib/schema"; // Your table schema for storing photo data
+import { db } from "@/lib/db"; // Ensure the correct import path
+import { Photos } from "@/lib/schema"; // Import the schema
+import { eq } from "drizzle-orm"; // Import the SQL helper
 
 export async function POST(request: Request) {
   try {
@@ -12,11 +13,18 @@ export async function POST(request: Request) {
 
     // Check if the IP has already uploaded 2 photos
     const uploadedPhotos = await db
-      .select('photo_1', 'photo_2')
+      .select({
+        photo_1: Photos.photo_1,
+        photo_2: Photos.photo_2,
+      })
       .from(Photos)
-      .where({ ip_address: ipAddress });
+      .where(eq(Photos.ip_address, ipAddress)); // Corrected Drizzle syntax
 
-    if (uploadedPhotos.length > 0 && (uploadedPhotos[0].photo_1 && uploadedPhotos[0].photo_2)) {
+    if (
+      uploadedPhotos.length > 0 &&
+      uploadedPhotos[0].photo_1 &&
+      uploadedPhotos[0].photo_2
+    ) {
       return NextResponse.json(
         { error: "You can only upload 2 photos." },
         { status: 400 }
@@ -25,16 +33,21 @@ export async function POST(request: Request) {
 
     // Insert or update the photo in the database
     if (uploadedPhotos.length === 0) {
-      await db.insert(Photos).values({ ip_address: ipAddress, photo_1: photo });
+      await db.insert(Photos).values({
+        ip_address: ipAddress,
+        photo_1: photo,
+      });
     } else {
       if (!uploadedPhotos[0].photo_1) {
-        await db.update(Photos)
+        await db
+          .update(Photos)
           .set({ photo_1: photo })
-          .where({ ip_address: ipAddress });
+          .where(eq(Photos.ip_address, ipAddress));
       } else if (!uploadedPhotos[0].photo_2) {
-        await db.update(Photos)
+        await db
+          .update(Photos)
           .set({ photo_2: photo })
-          .where({ ip_address: ipAddress });
+          .where(eq(Photos.ip_address, ipAddress));
       }
     }
 
