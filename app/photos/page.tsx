@@ -10,13 +10,12 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 export default function PhotosPage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal visibility
-  const [photo, setPhoto] = useState<string | null>(null); // State to store the selected photo
+  const [photo, setPhoto] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   // Handle opening the modal
   const handleOpenModal = () => {
@@ -90,11 +89,14 @@ export default function PhotosPage() {
     } catch (error) {
       console.error("Error fetching IP address:", error);
       return null;
+    } finally {
+      setLoading(false);
     }
   };
 
   // Placeholder function for submitting the photo
   const handleSubmit = async () => {
+    setLoading(true);
     const userIP = await getUserIP(); // Get the IP address first
   
     if (!userIP) {
@@ -189,8 +191,15 @@ export default function PhotosPage() {
                 <button onClick={handleCloseModal} className="btn-secondary">
                   Close
                 </button>
-                <button onClick={handleSubmit} className="btn-primary">
-                  Submit
+                <button onClick={handleSubmit} className="btn-primary flex flex-row gap-2">
+                    {loading ? (
+                        <>
+                            <div className="spinner"></div>
+                            Submitting...
+                        </>
+                    ) : (
+                        "Upload"
+                    )}
                 </button>
               </div>
             </div>
