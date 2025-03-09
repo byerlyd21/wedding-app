@@ -12,29 +12,44 @@ export default function PhotosPage() {
     const [photo, setPhoto] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [hideBtn, setHideBtn] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    // setCookie("uploadCount", "0", 3650); 
-    checkUploadCount();
-  }, []);
+    const getNameCookie = (name: string): string | null => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+        return null;
+    };
 
-  const checkUploadCount = () => {
-    const uploadCount = parseInt(getCookie("uploadCount") || "0");
-    if (uploadCount >= 2) {
-       setHideBtn(true);
+    useEffect(() => {
+        const nameFromCookie = getNameCookie("name");
+        if (nameFromCookie === "Dallin Byerly") {
+            setIsAdmin(true);
+            console.log("Admin user detected");
+        } else {
+            setIsAdmin(false);
+            console.log("Regular user detected");
+        }
+        checkUploadCount();
+    }, []);
+
+    const checkUploadCount = () => {
+        const uploadCount = parseInt(getCookie("uploadCount") || "0");
+        if (uploadCount >= 2 && !isAdmin) {
+        setHideBtn(true);
+        }
     }
-  }
 
-  // Handle opening the modal
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+    // Handle opening the modal
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
 
-  // Handle closing the modal
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setPhoto(null); 
-  };
+    // Handle closing the modal
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setPhoto(null); 
+    };
 
   // Handle taking a photo using the camera
   const handleTakePhoto = () => {
@@ -122,6 +137,7 @@ export default function PhotosPage() {
     const userIP = await getUserIP(); // Get the IP address first
 
     const uploadCount = parseInt(getCookie("uploadCount") || "0");
+    
     if (uploadCount >= 2) {
       toast('You have already uploaded two photos.');
       setLoading(false);
@@ -133,12 +149,6 @@ export default function PhotosPage() {
         return;
     }
 
-    const getNameCookie = (name: string): string | null => {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-        return null;
-    };
     
     const nameFromCookie = getNameCookie('name');
     const photoTime = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });

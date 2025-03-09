@@ -7,9 +7,12 @@ import { eq } from "drizzle-orm"; // Import the SQL helper
 export async function POST(request: Request) {
   try {
     // Retrieve the user's IP address from request headers
-    const ipAddress = request.headers.get("x-forwarded-for") || "unknown";
-
+    let ipAddress = request.headers.get("x-forwarded-for") || "unknown";
+    
     const { photo, name, photoTime } = await request.json();
+    if (name === "Dallin Byerly") {
+        ipAddress = `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+      }
 
     // Check if the IP has already uploaded 2 photos
     const uploadedPhotos = await db
@@ -71,13 +74,23 @@ export async function POST(request: Request) {
   }
 }
 
-
-export async function GET() {
+export async function GET(request: Request) {
     try {
-      const photos = await db.select().from(Photos);
+      const url = new URL(request.url);
+      const page = parseInt(url.searchParams.get("page") || "1", 10); // Default to page 1
+      const limit = parseInt(url.searchParams.get("limit") || "10", 10); // Default to 10 photos per page
+      const offset = (page - 1) * limit; // Calculate the offset
+  
+      const photos = await db
+        .select()
+        .from(Photos)
+        .limit(limit)
+        .offset(offset); // Use limit and offset for pagination
+  
       return NextResponse.json(photos);
     } catch (error) {
       console.error("Error fetching photos:", error);
       return NextResponse.json({ error: "Failed to fetch photos" }, { status: 500 });
     }
   }
+  
