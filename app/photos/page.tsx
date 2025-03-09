@@ -143,7 +143,7 @@ export default function PhotosPage() {
 
     const uploadCount = parseInt(getCookie("uploadCount") || "0");
     
-    if (uploadCount >= 2) {
+    if (!isAdmin && uploadCount >= 2) {
       toast('You have already uploaded two photos.');
       setLoading(false);
       return;
