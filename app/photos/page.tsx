@@ -2,8 +2,6 @@
 
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import Autoplay from "embla-carousel-autoplay";
 import { toast } from "sonner";
 
 
@@ -16,6 +14,7 @@ export default function PhotosPage() {
     const [hideBtn, setHideBtn] = useState(false);
 
   useEffect(() => {
+    setCookie("uploadCount", "0", 3650); 
     checkUploadCount();
   }, []);
 
@@ -133,14 +132,24 @@ export default function PhotosPage() {
         setLoading(false);
         return;
     }
-  
+
+    const getNameCookie = (name: string): string | null => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+        return null;
+    };
+    
+    const nameFromCookie = getNameCookie('name');
+    const photoTime = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
     try {
+
         const response = await fetch('/api/photos', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ photo, ipAddress: userIP }),
+          body: JSON.stringify({ photo, photoTime: photoTime, ipAddress: userIP, name: nameFromCookie }),
         });
     
         if (!response.ok) {
@@ -150,11 +159,11 @@ export default function PhotosPage() {
     
         // If the photo upload is successful, increment the upload count and set the cookie
         const newCount = uploadCount + 1;
-        setCookie("uploadCount", newCount.toString(), 3650); // Set cookie to last for 10 years
+        setCookie("uploadCount", newCount.toString(), 3650); 
         checkUploadCount();
         toast('Photo uploaded successfully!');
       } catch (error) {
-        toast(`${error instanceof Error ? error.message : String(error)}`);
+        toast(`${error instanceof Error ? error.message.replace(/['"]+/g, '') : String(error).replace(/['"]+/g, '')}`);
       } finally {
         setIsModalOpen(false); 
         setPhoto(null); 

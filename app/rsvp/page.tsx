@@ -42,6 +42,7 @@ export default function RSVPPage() {
 
     setLoading(false);
     if (response.ok) {
+        document.cookie = `name=${name}; expires=${new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000).toUTCString()}; path=/`;
         setSubmitted(true);
     } else {
         toast("Something went wrong!");

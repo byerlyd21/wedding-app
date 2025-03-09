@@ -9,13 +9,15 @@ export async function POST(request: Request) {
     // Retrieve the user's IP address from request headers
     const ipAddress = request.headers.get("x-forwarded-for") || "unknown";
 
-    const { photo } = await request.json();
+    const { photo, name, photoTime } = await request.json();
 
     // Check if the IP has already uploaded 2 photos
     const uploadedPhotos = await db
       .select({
         photo_1: Photos.photo_1,
         photo_2: Photos.photo_2,
+        photo_1_time: Photos.photo_1_time, // Fetch photo_1_time
+        photo_2_time: Photos.photo_2_time, // Fetch photo_2_time
       })
       .from(Photos)
       .where(eq(Photos.ip_address, ipAddress)); // Corrected Drizzle syntax
@@ -26,7 +28,7 @@ export async function POST(request: Request) {
       uploadedPhotos[0].photo_2
     ) {
       return NextResponse.json(
-        "You can only upload 2 photos.",
+        "Sneaky rascal, trying a new browser? Muwahahah! You can't trick me! No more photos for you!",
         { status: 400 }
       );
     }
@@ -35,21 +37,26 @@ export async function POST(request: Request) {
     if (uploadedPhotos.length === 0) {
       await db.insert(Photos).values({
         ip_address: ipAddress,
+        name: name || "Anonymous", // Default to "Anonymous" if no name
         photo_1: photo,
+        photo_1_time: photoTime, // Set the time for the first photo
+        photo_2_time: null, // Assign time for photo_2
       });
     } else {
-      if (!uploadedPhotos[0].photo_1) {
-        await db
-          .update(Photos)
-          .set({ photo_1: photo })
-          .where(eq(Photos.ip_address, ipAddress));
-      } else if (!uploadedPhotos[0].photo_2) {
-        await db
-          .update(Photos)
-          .set({ photo_2: photo })
-          .where(eq(Photos.ip_address, ipAddress));
+        if (!uploadedPhotos[0].photo_1) {
+          // If photo_1 is empty, insert it with the time
+          await db
+            .update(Photos)
+            .set({ photo_1: photo, photo_1_time: photoTime }) // Update photo_1 and its time
+            .where(eq(Photos.ip_address, ipAddress));
+        } else if (!uploadedPhotos[0].photo_2) {
+          // If photo_2 is empty, insert it with the time
+          await db
+            .update(Photos)
+            .set({ photo_2: photo, photo_2_time: photoTime }) // Update photo_2 and its time
+            .where(eq(Photos.ip_address, ipAddress));
+        }
       }
-    }
 
     return NextResponse.json(
       { message: "Photo uploaded successfully" },

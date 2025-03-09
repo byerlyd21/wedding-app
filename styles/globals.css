@@ -172,6 +172,20 @@ body {
     border-radius: 10px;
   }
 
+  .photo-info-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 2px;
+    padding: 8px;
+    font-size: 12px;
+    color: #4d4d56;
+    background-color: #e7eeee;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+
 .modal-header {
     display: flex;
     flex-direction: column;
