@@ -23,9 +23,13 @@ export default function PhotosPage() {
 
     useEffect(() => {
         const nameFromCookie = getNameCookie("name");
-        if (nameFromCookie === "Dallin Byerly") {
+        if (nameFromCookie === "Dallin Byerly" || nameFromCookie === "Maya Stevenson") {
             setIsAdmin(true);
-            toast("Welcome " + nameFromCookie || "Admin")
+            if (nameFromCookie === "Maya Stevenson") {
+                toast("Welcome my beautiful and wonderful fiance" + nameFromCookie || "Admin")
+            } else {
+                toast("Welcome " + nameFromCookie || "Admin")
+            }
             console.log("Admin user detected:", nameFromCookie);
         } else {
             setIsAdmin(false);
