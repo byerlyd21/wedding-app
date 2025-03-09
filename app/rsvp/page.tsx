@@ -27,10 +27,8 @@ export default function RSVPPage() {
     useEffect(() => {
         const nameFromCookie = getNameCookie("name");
         if (nameFromCookie) {
-            toast("Rsvp already submitted")
+            toast("RSVP already submitted")
             setSubmitted(true)
-        } else {
-            toast("No rsvp detected")
         }
     }, []);
 
