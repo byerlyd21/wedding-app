@@ -25,11 +25,11 @@ export default function PhotosPage() {
         const nameFromCookie = getNameCookie("name");
         if (nameFromCookie === "Dallin Byerly") {
             setIsAdmin(true);
-            toast("Welcome " + nameFromCookie || "Admin")
+            toast("Welcome guest " + nameFromCookie || "Admin")
             console.log("Admin user detected:", nameFromCookie);
         } else {
             setIsAdmin(false);
-            toast("Welcome " + nameFromCookie || "Guest")
+            toast("Welcome admin" + nameFromCookie || "Guest")
             console.log("Regular user detected:", nameFromCookie);
         }
         checkUploadCount();
