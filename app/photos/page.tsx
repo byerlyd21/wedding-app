@@ -14,7 +14,7 @@ export default function PhotosPage() {
     const [hideBtn, setHideBtn] = useState(false);
 
   useEffect(() => {
-    setCookie("uploadCount", "0", 3650); 
+    // setCookie("uploadCount", "0", 3650); 
     checkUploadCount();
   }, []);
 
