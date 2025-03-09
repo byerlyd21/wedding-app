@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db"; // Ensure the correct import path
 import { Photos } from "@/lib/schema"; // Import the schema
 import { eq } from "drizzle-orm"; // Import the SQL helper
+import { sql } from "drizzle-orm";
 
 export async function POST(request: Request) {
   try {
@@ -81,11 +82,13 @@ export async function GET(request: Request) {
       const limit = parseInt(url.searchParams.get("limit") || "10", 10); // Default to 10 photos per page
       const offset = (page - 1) * limit; // Calculate the offset
   
+      const random = url.searchParams.get("random") === "true"; // Check if 'random=true' is passed
+
       const photos = await db
-        .select()
-        .from(Photos)
-        .limit(limit)
-        .offset(offset); // Use limit and offset for pagination
+      .select()
+      .from(Photos)
+      .orderBy(random ? sql`RANDOM()` : Photos.id) // Use raw SQL for random sorting
+      .limit(limit);
   
       return NextResponse.json(photos);
     } catch (error) {

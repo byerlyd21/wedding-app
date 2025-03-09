@@ -193,7 +193,7 @@ export default function PhotosPage() {
       <div className="photos-container relative w-full h-full overflow-hidden">
         <div className="rsvp-header text-center">
           <h1 className="header-primary mt-4">Help us remember our special day!</h1>
-          <p className="secondary-text mt-4">
+          <p className="text-secondary">
             Take 2 photos throughout the event and share them with us!
           </p>
         </div>

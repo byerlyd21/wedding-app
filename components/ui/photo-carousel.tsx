@@ -64,7 +64,7 @@ export default function PhotoCarousel() {
 
     const interval = setInterval(() => {
       fetchPhotos(); // Fetch new random photos every 30 seconds
-    }, 30000);
+    }, 40000);
 
     return () => clearInterval(interval);
   }, []);
