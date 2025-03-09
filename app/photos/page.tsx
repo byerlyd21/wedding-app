@@ -31,8 +31,8 @@ export default function PhotosPage() {
             setIsAdmin(false);
             toast("Welcome guest" + nameFromCookie || "Guest")
             console.log("Regular user detected:", nameFromCookie);
+            checkUploadCount();
         }
-        checkUploadCount();
     }, []);
 
     const checkUploadCount = () => {
