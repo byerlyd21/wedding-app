@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     InputOTP,
     InputOTPGroup,
@@ -16,6 +16,23 @@ export default function RSVPPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [nameError, setNameError] = useState("");
+
+  const getNameCookie = (name: string): string | null => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+    return null;
+    };
+
+    useEffect(() => {
+        const nameFromCookie = getNameCookie("name");
+        if (nameFromCookie) {
+            toast("Rsvp already submitted")
+            setSubmitted(true)
+        } else {
+            toast("No rsvp detected")
+        }
+    }, []);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

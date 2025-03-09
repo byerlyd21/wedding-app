@@ -25,11 +25,10 @@ export default function PhotosPage() {
         const nameFromCookie = getNameCookie("name");
         if (nameFromCookie === "Dallin Byerly") {
             setIsAdmin(true);
-            toast("Welcome admin " + nameFromCookie || "Admin")
+            toast("Welcome " + nameFromCookie || "Admin")
             console.log("Admin user detected:", nameFromCookie);
         } else {
             setIsAdmin(false);
-            toast("Welcome guest" + nameFromCookie || "Guest")
             console.log("Regular user detected:", nameFromCookie);
             checkUploadCount();
         }
@@ -39,9 +38,6 @@ export default function PhotosPage() {
         const uploadCount = parseInt(getCookie("uploadCount") || "0");
         if (uploadCount >= 2 && !isAdmin) {
             setHideBtn(true);
-            toast("Hiding button")
-        } else {
-            toast("Showing button")
         }
     }
 
