@@ -3,6 +3,12 @@ body {
     background-color: rgb(255, 254, 249);
     color: #2a2a2f;
   }
+
+.border {
+    border: 2px solid #2e392e;
+    outline: 1px solid #2e392e;
+    outline-offset: 3px;
+}
   
 
 .rsvp-container {
@@ -10,7 +16,8 @@ body {
     flex-direction: column;
     align-items: center;
     margin-top: 32px;
-    height: 100vh;
+    height: 95vh;
+    margin: 2px;
 }
   
 .rsvp-form {
@@ -92,19 +99,19 @@ body {
     text-align: center;
 }
 
-/* .header-primary {
-    font-size: 24px;
-    font-weight: bold;
-
-} */
-
 .header-primary {
-    font-family: 'Playfair Display', serif; /* Elegant, romantic typeface */
-    color: #3a3423; /* Warm, rich brown for a classic Italian feel */
+    font-family: 'Playfair Display', serif;
+    color: #3a3423; 
     text-align: center;
     font-size: 24px;
     padding: 20px 0;
-    
+}
+
+.header-secondary {
+    font-size: 16px;
+    margin-top: 8px;
+    color: #6f6f6f;
+    font-family: 'Playfair Display', serif;
 }
 
 .text-secondary {
