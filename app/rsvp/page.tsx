@@ -108,7 +108,7 @@ export default function RSVPPage() {
           <>
           <div className="rsvp-header">
               <h1 className="header-primary">Reserve your spot!</h1>
-              <p className="text-secondary">We'd love to see you at our wedding on August 16th at 5:00 pm</p>
+              <p className="text-secondary">We'd love to see you at our wedding on August 13th at 5:00 pm</p>
           </div>
               <form onSubmit={handleSubmit} className="rsvp-form">
                   <label className="text-secondary w-full">Name</label>
