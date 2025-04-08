@@ -8,11 +8,17 @@ import {
     InputOTPSlot,
   } from "@/components/ui/input-otp"
   import { toast } from "sonner"
+import { Switch } from "@/components/ui/switch"
 
 export default function RSVPPage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [bringingGuests, setBringingGuests] = useState(false);
+  const [guestCount, setGuestCount] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [nameError, setNameError] = useState("");
@@ -38,21 +44,32 @@ export default function RSVPPage() {
     if (!name) {
         toast.error("Please enter your name.");
         return;
-      }
-      if (!phone || phone.length < 10) {
+    }
+    if (!phone || phone.length < 10) {
         toast.error("Please enter a valid phone number.");
         return;
-      }
-      if (!address) {
-        toast.error("Please enter your address.");
+    }
+    if (!streetAddress || !city || !state || !postalCode) {
+        toast.error("Please enter your complete address.");
         return;
-      }
+    }
     setLoading(true);
 
     const response = await fetch("/api/rsvp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, phone, address }),
+      body: JSON.stringify({ 
+        name, 
+        phone, 
+        address: {
+          street: streetAddress,
+          city,
+          state,
+          postalCode
+        },
+        bringingGuests,
+        guestCount: bringingGuests ? guestCount : 0
+      }),
     });
 
     setLoading(false);
@@ -100,6 +117,7 @@ export default function RSVPPage() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="rsvp-input"
+                      placeholder="Your full name"
                   />
                   <label className="text-secondary w-full">Phone</label>
                   <div className="phone-input-container">
@@ -122,15 +140,68 @@ export default function RSVPPage() {
                           </InputOTPGroup>
                       </InputOTP>
                   </div>
-                  <label className="text-secondary w-full">Address</label>
+                  <label className="text-secondary w-full">Street Address</label>
                   <input
                       type="text"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
+                      value={streetAddress}
+                      onChange={(e) => setStreetAddress(e.target.value)}
                       className="rsvp-input"
+                      placeholder="123 Main St"
                   />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-secondary w-full">City</label>
+                      <input
+                          type="text"
+                          value={city}
+                          onChange={(e) => setCity(e.target.value)}
+                          className="rsvp-input"
+                          placeholder="City"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-secondary w-full">State</label>
+                      <input
+                          type="text"
+                          value={state}
+                          onChange={(e) => setState(e.target.value)}
+                          className="rsvp-input"
+                          placeholder="State"
+                          maxLength={2}
+                      />
+                    </div>
+                  </div>
+                  <label className="text-secondary w-full">Postal Code</label>
+                  <input
+                      type="text"
+                      value={postalCode}
+                      onChange={(e) => setPostalCode(e.target.value)}
+                      className="rsvp-input"
+                      placeholder="12345"
+                      maxLength={5}
+                  />
+                  <div className="flex items-center space-x-4 mt-4">
+                    <label className="text-secondary">Bringing Guests?</label>
+                    <Switch
+                      checked={bringingGuests}
+                      onCheckedChange={setBringingGuests}
+                    />
+                  </div>
+                  {bringingGuests && (
+                    <div className="mt-4">
+                      <label className="text-secondary w-full">Number of Guests</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="5"
+                        value={guestCount}
+                        onChange={(e) => setGuestCount(parseInt(e.target.value))}
+                        className="rsvp-input"
+                      />
+                    </div>
+                  )}
                   {nameError && <span className="text-red-500 text-sm">{nameError}</span>}
-                  <button type="submit" className="btn-primary" disabled={loading}>
+                  <button type="submit" className="btn-primary mt-6" disabled={loading}>
                   {loading ? (
                       <>
                           <div className="spinner"></div>
