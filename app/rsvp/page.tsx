@@ -113,7 +113,7 @@ export default function RSVPPage() {
           <>
           <div className="rsvp-header">
               <h1 className="header-primary">Request an invitation!</h1>
-              <p className="text-secondary">We'd love to see you at our wedding on August 13th at 5:00 pm in Sandy, Utah</p>
+              <p className="text-secondary">We'd love to see you at our wedding on August 13th in Sandy, Utah</p>
           </div>
               <form onSubmit={handleSubmit} className="rsvp-form">
                   <label className="text-secondary w-full">Name</label>
@@ -214,7 +214,7 @@ export default function RSVPPage() {
                     </div>
                   )}
                   {nameError && <span className="text-red-500 text-sm">{nameError}</span>}
-                  <button type="submit" className="btn-primary mt-6" disabled={loading}>
+                  <button type="submit" className="btn-primary mt-6 mb-12" disabled={loading}>
                   {loading ? (
                       <>
                           <div className="spinner"></div>
