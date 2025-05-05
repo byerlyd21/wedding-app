@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch"
 export default function RSVPPage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
@@ -49,6 +50,10 @@ export default function RSVPPage() {
         toast.error("Please enter a valid phone number.");
         return;
     }
+    if (!email || !email.includes('@')) {
+        toast.error("Please enter a valid email address.");
+        return;
+    }
     if (!streetAddress || !city || !state || !postalCode) {
         toast.error("Please enter your complete address.");
         return;
@@ -61,14 +66,14 @@ export default function RSVPPage() {
       body: JSON.stringify({ 
         name, 
         phone, 
+        email,
         address: {
           street: streetAddress,
           city,
           state,
           postalCode
         },
-        bringingGuests,
-        guestCount: bringingGuests ? guestCount : 0
+        numGuests: guestCount
       }),
     });
 
@@ -107,8 +112,8 @@ export default function RSVPPage() {
           ) : (
           <>
           <div className="rsvp-header">
-              <h1 className="header-primary">Reserve your spot!</h1>
-              <p className="text-secondary">We'd love to see you at our wedding on August 13th at 5:00 pm</p>
+              <h1 className="header-primary">Request an invitation!</h1>
+              <p className="text-secondary">We'd love to see you at our wedding on August 13th at 5:00 pm in Sandy, Utah</p>
           </div>
               <form onSubmit={handleSubmit} className="rsvp-form">
                   <label className="text-secondary w-full">Name</label>
@@ -140,6 +145,14 @@ export default function RSVPPage() {
                           </InputOTPGroup>
                       </InputOTP>
                   </div>
+                  <label className="text-secondary w-full">Email</label>
+                  <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="rsvp-input"
+                      placeholder="your.email@example.com"
+                  />
                   <label className="text-secondary w-full">Street Address</label>
                   <input
                       type="text"
@@ -193,7 +206,7 @@ export default function RSVPPage() {
                       <input
                         type="number"
                         min="1"
-                        max="5"
+                        max="3"
                         value={guestCount}
                         onChange={(e) => setGuestCount(parseInt(e.target.value))}
                         className="rsvp-input"
@@ -208,7 +221,7 @@ export default function RSVPPage() {
                           Submitting...
                       </>
                   ) : (
-                      "Submit RSVP"
+                      "Submit Request"
                   )}
                   </button>
               </form>

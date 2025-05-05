@@ -1,6 +1,6 @@
 {
-  "id": "5aff0b0a-4403-477f-b65f-a7e416a4c0ee",
-  "prevId": "f536e90a-329a-4c32-ba8e-23e439ba2d6e",
+  "id": "d30b94d0-beec-4f5a-bf8f-69d949f5f9eb",
+  "prevId": "b2f9e1f4-76e4-4f24-9b12-7816c283ef64",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -26,8 +26,26 @@
           "primaryKey": false,
           "notNull": false
         },
+        "photo_1_time": {
+          "name": "photo_1_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "photo_2": {
           "name": "photo_2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "photo_2_time": {
+          "name": "photo_2_time",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -73,6 +91,24 @@
         "address": {
           "name": "address",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bringing_guests": {
+          "name": "bringing_guests",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "guest_count": {
+          "name": "guest_count",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },

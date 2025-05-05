@@ -1,6 +1,6 @@
 {
-  "id": "b2f9e1f4-76e4-4f24-9b12-7816c283ef64",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "1157da21-85d1-4c48-af5a-fc8fd8c4ed7d",
+  "prevId": "d30b94d0-beec-4f5a-bf8f-69d949f5f9eb",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -93,6 +93,26 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bringing_guests": {
+          "name": "bringing_guests",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "guest_count": {
+          "name": "guest_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
         },
         "created_at": {
           "name": "created_at",

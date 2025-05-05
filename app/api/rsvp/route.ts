@@ -5,11 +5,27 @@ import { RSVPs } from "../../../lib/schema";
 
 export async function POST(request: Request) {
   try {
-    const { name, phone, address } = await request.json();
-    await db.insert(RSVPs).values({ name, phone, address });
+    const { name, phone, email, address, numGuests } = await request.json();
+    console.log('Received data:', { name, phone, email, address, numGuests });
+    
+    await db.insert(RSVPs).values({ 
+      name, 
+      phone, 
+      email,
+      address,
+      num_guests: numGuests || 0
+    });
     return NextResponse.json({ message: "RSVP submitted successfully" }, { status: 200 });
-  } catch (error) {
-    console.error("Database error:", error);
-    return NextResponse.json({ error: "Database error" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Database error details:", {
+      message: error?.message,
+      code: error?.code,
+      detail: error?.detail,
+      stack: error?.stack
+    });
+    return NextResponse.json({ 
+      error: "Database error", 
+      details: error?.message 
+    }, { status: 500 });
   }
 }
