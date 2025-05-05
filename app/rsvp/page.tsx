@@ -103,7 +103,7 @@ export default function RSVPPage() {
               <h1 className="header-primary mt-24">Thank you!</h1>
               <p className="header-secondary">We look forward to seeing you!</p>
               <a
-                  href="https://amazon.com"
+                  href="https://www.amazon.com/wedding/registry/2DINWRXH2WTDC"
                   className="btn-primary mt-12!"
                   >
                   View our registry
