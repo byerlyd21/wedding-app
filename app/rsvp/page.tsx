@@ -193,7 +193,7 @@ export default function RSVPPage() {
                       placeholder="12345"
                       maxLength={5}
                   />
-                  <div className="flex items-center space-x-4 mt-4">
+                  {/* <div className="flex items-center space-x-4 mt-4">
                     <label className="text-secondary">Bringing Guests?</label>
                     <Switch
                       checked={bringingGuests}
@@ -212,7 +212,7 @@ export default function RSVPPage() {
                         className="rsvp-input"
                       />
                     </div>
-                  )}
+                  )} */}
                   {nameError && <span className="text-red-500 text-sm">{nameError}</span>}
                   <button type="submit" className="btn-primary mt-6 mb-12" disabled={loading}>
                   {loading ? (
